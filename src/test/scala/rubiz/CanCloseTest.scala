@@ -14,14 +14,14 @@ class CanCloseTest extends rubiz.WordSpecBase with DisjunctionValues with Disjun
     "close single value" in {
       val foo = new Foo()
       val result = CanClose.using(foo) { _ => 1 }
-      result.attemptRun.value shouldBe 1 //Just to prove we made it here
+      result.unsafePerformSyncAttempt.value shouldBe 1 //Just to prove we made it here
       foo.isClosed shouldBe true
     }
 
     "close single value for ExecutorService" in {
       val foo = Executors.newSingleThreadExecutor()
       val result = CanClose.using(foo) { _ => 1 }
-      result.attemptRun.value shouldBe 1 //Just to prove we made it here
+      result.unsafePerformSyncAttempt.value shouldBe 1 //Just to prove we made it here
       foo.isShutdown shouldBe true
     }
 
@@ -29,7 +29,7 @@ class CanCloseTest extends rubiz.WordSpecBase with DisjunctionValues with Disjun
       val foo = new Foo()
       an[Exception] should be thrownBy {
         val task = CanClose.using(foo) { _ => throw new Exception() }
-        task.run //This will throw the exception
+        task.unsafePerformSync //This will throw the exception
       }
       foo.isClosed shouldBe true
     }
@@ -74,7 +74,7 @@ class CanCloseTest extends rubiz.WordSpecBase with DisjunctionValues with Disjun
 
   def computeWithClose(acquire: Task[Int] = Task.delay(1), stepFunc: Int => Task[Long] = { i: Int => Task.delay(i.toLong) }): (Boolean, Throwable \/ Long) = {
     var closed = false
-    val maybeValue = CanClose.computeWithClose(acquire)(stepFunc)(CanClose.createFromTask { _ => Task.delay(closed = true) }).attemptRun
+    val maybeValue = CanClose.computeWithClose(acquire)(stepFunc)(CanClose.createFromTask { _ => Task.delay(closed = true) }).unsafePerformSyncAttempt
     (closed, maybeValue)
   }
 }

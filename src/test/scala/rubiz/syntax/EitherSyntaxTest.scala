@@ -18,10 +18,10 @@ class EitherSyntaxTest extends rubiz.WordSpecBase {
   }
   "EitherSyntax.toTask" should {
     "convert exception to fail" in {
-      left.toTask.attemptRun shouldBe 'left
+      left.toTask.unsafePerformSyncAttempt shouldBe 'left
     }
     "convert right to fail" in {
-      right.toTask.attemptRun shouldBe 'right
+      right.toTask.unsafePerformSyncAttempt shouldBe 'right
     }
   }
 }

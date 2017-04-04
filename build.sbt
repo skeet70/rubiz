@@ -8,9 +8,9 @@ crossScalaVersions := Seq("2.11.8", "2.12.1")
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.0" % "test",
   "org.scalacheck" %% "scalacheck" % "1.13.4" % "test",
-  "org.scalaz" %% "scalaz-core" % "7.1.11",
-  "org.scalaz" %% "scalaz-concurrent" % "7.1.11",
-  "org.typelevel" %% "scalaz-scalatest" % "0.5.1" % "test")
+  "org.scalaz" %% "scalaz-core" % "7.2.10",
+  "org.scalaz" %% "scalaz-concurrent" % "7.2.10",
+  "org.typelevel" %% "scalaz-scalatest" % "1.1.2" % "test")
 
 coverageHighlighting := scalaBinaryVersion.value == "2.11"
 
@@ -30,8 +30,8 @@ scalacOptions ++= Seq(
 scalacOptions ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((2, scalaMajor)) if scalaMajor >= 11 => Seq(
-      "-Ywarn-unused-import", // Not available in 2.10
-      "-Ywarn-numeric-widen" // In 2.10 this produces a some strange spurious error
+      "-Ywarn-unused-import",
+      "-Ywarn-numeric-widen"
     )
     case _ => Seq.empty
   }

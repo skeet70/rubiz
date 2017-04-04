@@ -18,14 +18,14 @@ Rubiz
 
 ## Purpose
 
-Provides much needed syntax and missing conversions for Scalaz 7.1.
+Provides much needed syntax and missing conversions for Scalaz 7.2.
 
 ## Installation
 
 Add the following to your `build.sbt` file:
 
 ```
-libraryDependencies += "com.rubiconproject" %% "rubiz" % "0.4.+"
+libraryDependencies += "com.rubiconproject" %% "rubiz" % "1.0.+"
 ```
 
 Import all the additional syntax with `import rubiz.syntax.all._`. Specific subsets of syntax can be
@@ -159,7 +159,7 @@ Like `scalaz.concurrent.Task.timed` but with a non-null, useful error message in
 ```tut:book
 (Task.delay(Thread.sleep(100.millis.toMillis))
   .labeledTimeout(2.millis, "silly example")
-  .attemptRun)
+  .unsafePerformSyncAttempt)
 ```
 
 #### failMap
@@ -169,7 +169,7 @@ failure.
 ```tut:book
 (Task.fail(new Exception("Esoteric nonsense."))
   .failMap(_ => new Exception("Contextual description of what happened."))
-  .attemptRun)
+  .unsafePerformSyncAttempt)
 ```
 
 #### attemptFold
@@ -207,7 +207,7 @@ logging.
 ```tut:book
 (Task.delay[Boolean](throw new Exception("I can't search this list!"))
   .peekFail(_ => println("What is an element, really?"))
-  .attemptRun)
+  .unsafePerformSyncAttempt)
 ```
 
 #### using
@@ -219,7 +219,7 @@ If the object to be closed isn't [`java.io.Closeable`](https://docs.oracle.com/j
 class CloseableThing extends java.io.Closeable { def close: Unit = println("Not so fast! I have been closed.") }
 Task.delay(new CloseableThing).using { closeableThing =>
   throw new Exception("All your resources are lost to chaos")
-}.attemptRun
+}.unsafePerformSyncAttempt
 ```
 
 ### Either

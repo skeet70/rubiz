@@ -74,14 +74,14 @@ class CatchableSyntaxTest extends rubiz.WordSpecBase {
   "onException" should {
     "do nothing on success" in {
       var a = 1
-      Task.now(42).onException(Task.delay(a += 1)).run
+      Task.now(42).onException(Task.delay(a += 1)).unsafePerformSync
       a shouldBe 1
     }
 
     "perform its effect on exception" in {
       var a = 1
       try {
-        Task.delay[Int](Predef.???).onException(Task.delay(a += 1)).run
+        Task.delay[Int](Predef.???).onException(Task.delay(a += 1)).unsafePerformSync
         false
       } catch {
         case _: Throwable => a == 2
@@ -93,14 +93,14 @@ class CatchableSyntaxTest extends rubiz.WordSpecBase {
   "ensuring" should {
     "perform its effect on success" in {
       var a = 1
-      Task.delay(42).ensuring(Task.delay(a += 1)).run
+      Task.delay(42).ensuring(Task.delay(a += 1)).unsafePerformSync
       a shouldBe 2
     }
 
     "perform its effect on exception" in {
       var a = 1
       try {
-        Task.delay[Int](Predef.???).ensuring(Task.delay(a += 1)).run
+        Task.delay[Int](Predef.???).ensuring(Task.delay(a += 1)).unsafePerformSync
         false
       } catch {
         case _: Throwable => a == 2

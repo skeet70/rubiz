@@ -15,10 +15,10 @@ class TrySyntaxTest extends rubiz.WordSpecBase {
 
   "Try.toTask" should {
     "create Task.fail for Failure" in {
-      Try(throw new Exception()).toTask.attemptRun shouldBe 'left
+      Try(throw new Exception()).toTask.unsafePerformSyncAttempt shouldBe 'left
     }
     "create Task.now for values" in {
-      Try(1).toTask.attemptRun.value shouldBe 1
+      Try(1).toTask.unsafePerformSyncAttempt.value shouldBe 1
     }
   }
 }
